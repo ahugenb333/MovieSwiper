@@ -1,0 +1,56 @@
+CREATE TABLE MovieEntity (
+    id INTEGER NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    overview TEXT NOT NULL,
+    posterPath TEXT,
+    backdropPath TEXT,
+    releaseDate TEXT,
+    voteAverage REAL NOT NULL,
+    genreIds TEXT NOT NULL,
+    popularity REAL NOT NULL
+);
+
+CREATE TABLE WatchlistEntity (
+    movieId INTEGER NOT NULL PRIMARY KEY,
+    addedAt INTEGER NOT NULL,
+    isWatched INTEGER AS kotlin.Boolean DEFAULT 0 NOT NULL
+);
+
+CREATE TABLE UserPreferenceTag (
+    tag TEXT NOT NULL PRIMARY KEY,
+    score INTEGER NOT NULL DEFAULT 0
+);
+
+-- Queries
+insertMovie:
+INSERT OR REPLACE INTO MovieEntity(id, title, overview, posterPath, backdropPath, releaseDate, voteAverage, genreIds, popularity)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+getMovie:
+SELECT * FROM MovieEntity WHERE id = ?;
+
+addToWatchlist:
+INSERT OR REPLACE INTO WatchlistEntity(movieId, addedAt, isWatched)
+VALUES (?, ?, ?);
+
+removeFromWatchlist:
+DELETE FROM WatchlistEntity WHERE movieId = ?;
+
+updateWatchedStatus:
+UPDATE WatchlistEntity SET isWatched = ? WHERE movieId = ?;
+
+getWatchlist:
+SELECT MovieEntity.* FROM MovieEntity
+JOIN WatchlistEntity ON MovieEntity.id = WatchlistEntity.movieId
+ORDER BY WatchlistEntity.addedAt DESC;
+
+getWatchlistMetadata:
+SELECT * FROM WatchlistEntity WHERE movieId = ?;
+
+updateTagScore:
+INSERT INTO UserPreferenceTag(tag, score)
+VALUES (?, ?)
+ON CONFLICT(tag) DO UPDATE SET score = UserPreferenceTag.score + excluded.score;
+
+getAllTags:
+SELECT * FROM UserPreferenceTag ORDER BY score DESC;
