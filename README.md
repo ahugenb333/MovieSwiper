@@ -16,9 +16,12 @@ Three tabs at the bottom of the app:
 
 ### How recommendations work
 
-- **Matcher** fetches movies from TMDB using filters based on your taste (liked genres, avoided genres, quality thresholds), then re-ranks them on the server.
-- **Finder** starts with a broad pool of well-rated movies, asks adaptive questions to split that pool, and returns your top picks when done.
-- Swipes in Matcher sync to the backend so future sessions get smarter over time.
+1. **Candidate selection** — TMDB discover queries pick well-rated movies, filtered by your genre taste and Finder answers.
+2. **Ranking with [Smile](https://haifengl.github.io/)** — after 4+ swipes, the server trains a per-user **ridge regression** model on your history (genres, ratings, popularity, release year). It predicts affinity scores for each candidate.
+3. **Cold start** — before enough swipes exist, a simpler genre-weight scorer in `core/logic` is used instead.
+4. **Finder** — narrows a candidate pool with adaptive yes/no questions, then runs the same ranker on what's left.
+
+Swipes sync to the backend as training data, so Matcher gets better the more you use it.
 
 ## Prerequisites
 
@@ -87,6 +90,7 @@ MovieSwiper/
 ├── iosApp/              iOS entry point
 ├── shared/              App shell, navigation, DI
 ├── server/              Ktor backend (port 8081)
+│   └── smile/           Smile ridge regression ranker
 ├── feature/
 │   ├── matcher/         Swipe UI
 │   ├── questions/       Finder Q&A flow
@@ -118,4 +122,4 @@ MovieSwiper/
 
 ## Tech stack
 
-Kotlin Multiplatform · Compose Multiplatform · Decompose · Ktor · Koin · SQLDelight · Coil · TMDB API
+Kotlin Multiplatform · Compose Multiplatform · Decompose · Ktor · Koin · SQLDelight · Coil · TMDB API · [Smile ML](https://haifengl.github.io/) 4.4

@@ -1,6 +1,10 @@
 package org.ahugenb.movieswiper.core.models
 
 object GenreConstants {
+    val allGenreIds: List<Int> = listOf(
+        28, 12, 16, 35, 80, 99, 18, 10751, 14, 36, 27, 10402, 9648, 10749, 878, 10770, 53, 10752, 37,
+    )
+
     private val genreMap = mapOf(
         28 to "Action",
         12 to "Adventure",

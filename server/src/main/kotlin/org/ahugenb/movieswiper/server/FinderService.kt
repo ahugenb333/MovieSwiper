@@ -1,11 +1,7 @@
 package org.ahugenb.movieswiper.server
 
-import org.ahugenb.movieswiper.core.logic.DiscoverQueryBuilder
 import org.ahugenb.movieswiper.core.logic.FinderQuestionEngine
-import org.ahugenb.movieswiper.core.logic.MoviePool
-import org.ahugenb.movieswiper.core.logic.TastePreferences
 import org.ahugenb.movieswiper.core.models.*
-import org.ahugenb.movieswiper.data.api.TmdbApi
 
 class FinderService(
     private val recommendationService: RecommendationService,

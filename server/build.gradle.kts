@@ -23,6 +23,8 @@ dependencies {
     implementation(libs.ktorSerializationKotlinxJson)
     implementation(libs.ktorServerCors)
     implementation(libs.ktorServerCallLogging)
+    implementation(libs.smileCore)
+    implementation(libs.smileKotlin)
     implementation(libs.logback)
     implementation(libs.koinCore)
     implementation(libs.napier)
